@@ -55,4 +55,22 @@ public interface UserInterface extends Remote {
      * @throws java.rmi.RemoteException 
      */
     public void removeContact(UserInterface contact) throws RemoteException;
+    
+    /**
+     * @return
+     * @throws RemoteException 
+     */
+    public ArrayList<UserInterface> getContactRequest() throws RemoteException;
+    
+    /**
+     * @param user
+     * @throws RemoteException 
+     */
+    public void addContactRequest(UserInterface user) throws RemoteException;
+    
+    /**
+     * @param user
+     * @throws RemoteException 
+     */
+    public void removeContactRequest(UserInterface user) throws RemoteException;
 }

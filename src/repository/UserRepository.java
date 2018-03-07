@@ -13,6 +13,8 @@ import entity.User;
  */
 public class UserRepository {
     
+    //TODO Connection to DB/Serialization
+    
     private static String userName = "chi_chat";
     private static String password = "Z-=37^3Jp";
     private static String dbms = "mysql";

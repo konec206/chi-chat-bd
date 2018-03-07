@@ -6,7 +6,7 @@
 package chichatbd;
 
 import entity.User;
-import entity.UserService;
+import services.UserService;
 import interfaces.UserServiceInterface;
 import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;

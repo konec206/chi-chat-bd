@@ -20,6 +20,7 @@ public class User implements UserInterface {
     private String firstName;
     private String password;
     private ArrayList<UserInterface> contacts;
+    private ArrayList<UserInterface> contactRequests;
 
     public User() {}
     
@@ -29,6 +30,7 @@ public class User implements UserInterface {
         this.firstName = firstName;
         this.password = utils.Security.encodePassword(plainPassword);
         this.contacts = new ArrayList<>();
+        this.contactRequests = new ArrayList<>();
     }
     
     @Override
@@ -67,4 +69,23 @@ public class User implements UserInterface {
         if (this.contacts.contains(contact))
             this.contacts.remove(contact);
     }   
+
+    @Override
+    public ArrayList<UserInterface> getContactRequest() throws RemoteException {
+        return this.contactRequests;
+    }
+
+    @Override
+    public void addContactRequest(UserInterface user) throws RemoteException {
+        if (!this.contactRequests.contains(user))
+            this.contactRequests.add(user);
+    }
+
+    @Override
+    public void removeContactRequest(UserInterface user) throws RemoteException {
+        if (this.contactRequests.contains(user))
+            this.contactRequests.remove(user);
+    }
+    
+    
 }

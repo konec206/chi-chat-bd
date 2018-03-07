@@ -14,4 +14,5 @@ import java.rmi.RemoteException;
  */
 public interface UserServiceInterface extends Remote {
     public boolean authenticateUser(String username, String plainPassword) throws RemoteException;
+    public boolean sendContactRequest(String senderUserName, String receiverUserName) throws RemoteException, Exception;
 }

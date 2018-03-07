@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package services;
 
+import entity.User;
 import interfaces.UserInterface;
 import interfaces.UserServiceInterface;
 import java.rmi.RemoteException;
@@ -22,7 +23,7 @@ public class UserService implements UserServiceInterface, Runnable {
     private ArrayList<UserInterface> users;
 
     /**
-     * 
+     * Empty Constructor
      */
     public UserService() {
         this.users = new ArrayList<>();
@@ -30,10 +31,11 @@ public class UserService implements UserServiceInterface, Runnable {
     
     
     /**
+     * Authenticate a user from his username and the plainPassword
      * 
      * @param username
      * @param plainPassword
-     * @return
+     * @return boolean
      * @throws RemoteException 
      */
     @Override
@@ -43,7 +45,26 @@ public class UserService implements UserServiceInterface, Runnable {
         return user != null && user.getPassword().equals(utils.Security.encodePassword(plainPassword));
     }
 
-    
+    /**
+     * Send a contactRequest from senderUserName to receiverUserName
+     * @param senderUserName
+     * @param receiverUserName
+     * @return
+     * @throws RemoteException
+     * @throws Exception 
+     */
+    @Override
+    public boolean sendContactRequest(String senderUserName, String receiverUserName) throws RemoteException, Exception {
+        User sender = UserRepository.getUser(senderUserName);
+        User receiver = UserRepository.getUser(receiverUserName);
+        
+        if (sender == null || receiver == null)
+            throw new Exception("[USER SERVICE] " + senderUserName + " not found or " + receiverUserName + " not found!");
+        
+        receiver.addContactRequest(sender);
+        return true;
+    }
+        
     @Override
     public void run() {
         //For later
