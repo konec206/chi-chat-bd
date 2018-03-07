@@ -7,11 +7,7 @@ package entity;
 
 import interfaces.UserInterface;
 import java.rmi.RemoteException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import repository.UserRepository;
 
 /**
  *
@@ -53,16 +49,6 @@ public class User implements UserInterface {
     @Override
     public String getPassword() throws RemoteException {
         return this.password;
-    }
-
-    @Override
-    public boolean authenticate(String username, String plainPassword) throws RemoteException {
-        try {
-            return UserRepository.getUser(username).getPassword().equals(utils.Security.encodePassword(plainPassword));
-        } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return false;
     }
 
     @Override

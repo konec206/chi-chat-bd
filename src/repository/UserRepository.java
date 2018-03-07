@@ -25,6 +25,6 @@ public class UserRepository {
      * @return 
      */
     public static User getUser(String username) {
-        return null;
+        return new User("root", "fake", "user", "root");
     }
 }
