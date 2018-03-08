@@ -46,7 +46,7 @@ public class ChiChatBD {
         try {
             //UserService Binding
             registry.bind("userService", userStub);
-            System.out.println("[SERVER DB] UserService running...");
+            System.out.println("[USER SERVICE] UserService running...");
         } catch (AlreadyBoundException | AccessException ex) {
             Logger.getLogger(ChiChatBD.class.getName()).log(Level.SEVERE, null, ex);
         }

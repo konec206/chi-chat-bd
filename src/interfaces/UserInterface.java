@@ -60,17 +60,17 @@ public interface UserInterface extends Remote {
      * @return
      * @throws RemoteException 
      */
-    public ArrayList<UserInterface> getContactRequest() throws RemoteException;
+    public ArrayList<ContactRequestInterface> getContactRequest() throws RemoteException;
     
     /**
-     * @param user
+     * @param contactRequest
      * @throws RemoteException 
      */
-    public void addContactRequest(UserInterface user) throws RemoteException;
+    public void addContactRequest(ContactRequestInterface contactRequest) throws RemoteException;
     
     /**
-     * @param user
+     * @param contactRequest
      * @throws RemoteException 
      */
-    public void removeContactRequest(UserInterface user) throws RemoteException;
+    public void removeContactRequest(ContactRequestInterface contactRequest) throws RemoteException;
 }

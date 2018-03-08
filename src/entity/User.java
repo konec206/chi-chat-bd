@@ -5,7 +5,9 @@
  */
 package entity;
 
+import interfaces.ContactRequestInterface;
 import interfaces.UserInterface;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -13,14 +15,14 @@ import java.util.ArrayList;
  *
  * @author thibault
  */
-public class User implements UserInterface {
+public class User implements UserInterface, Serializable {
 
     private String userName;
     private String name;
     private String firstName;
     private String password;
     private ArrayList<UserInterface> contacts;
-    private ArrayList<UserInterface> contactRequests;
+    private ArrayList<ContactRequestInterface> contactRequests;
 
     public User() {}
     
@@ -31,6 +33,15 @@ public class User implements UserInterface {
         this.password = utils.Security.encodePassword(plainPassword);
         this.contacts = new ArrayList<>();
         this.contactRequests = new ArrayList<>();
+    }
+    
+    public User(UserInterface user) throws RemoteException {
+        this.userName = user.getUsername();
+        this.name = user.getName();
+        this.firstName = user.getFirstName();
+        this.password = user.getPassword();
+        this.contacts = user.getContacts();
+        this.contactRequests = user.getContactRequest();
     }
     
     @Override
@@ -71,20 +82,20 @@ public class User implements UserInterface {
     }   
 
     @Override
-    public ArrayList<UserInterface> getContactRequest() throws RemoteException {
+    public ArrayList<ContactRequestInterface> getContactRequest() throws RemoteException {
         return this.contactRequests;
     }
 
     @Override
-    public void addContactRequest(UserInterface user) throws RemoteException {
-        if (!this.contactRequests.contains(user))
-            this.contactRequests.add(user);
+    public void addContactRequest(ContactRequestInterface request) throws RemoteException {
+        if (!this.contactRequests.contains(request))
+            this.contactRequests.add(request);
     }
 
     @Override
-    public void removeContactRequest(UserInterface user) throws RemoteException {
-        if (this.contactRequests.contains(user))
-            this.contactRequests.remove(user);
+    public void removeContactRequest(ContactRequestInterface request) throws RemoteException {
+        if (this.contactRequests.contains(request))
+            this.contactRequests.remove(request);
     }
     
     
