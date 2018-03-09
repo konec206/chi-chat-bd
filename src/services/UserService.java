@@ -5,14 +5,11 @@
  */
 package services;
 
-import entity.ContactRequest;
 import entity.User;
 import interfaces.ContactRequestInterface;
 import interfaces.UserInterface;
 import interfaces.UserServiceInterface;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Date;
 import repository.UserRepository;
 
 /**
@@ -42,7 +39,7 @@ public class UserService implements UserServiceInterface {
         if (user == null) {
             throw new Exception("[USER SERVICE] User " + userName + " not found");
         }
-
+        
         return user;
     }
 
@@ -57,41 +54,38 @@ public class UserService implements UserServiceInterface {
     @Override
     public boolean authenticateUser(String username, String plainPassword) throws RemoteException {
         UserInterface user = this.userRepository.getUser(username);
+        
+        boolean authenticate = user != null && user.getPassword().equals(utils.Security.encodePassword(plainPassword));
+        
+        System.out.println("[USER SERVICE] User " + username + " has tried to authenticate : " + authenticate);
 
-        return user != null && user.getPassword().equals(utils.Security.encodePassword(plainPassword));
+        return authenticate;
     }
 
     /**
      * Send a contactRequest from senderUserName to receiverUserName
      *
-     * @param senderUserName
-     * @param receiverUserName
+     * @param request
      * @return
      * @throws RemoteException
      * @throws Exception
      */
     @Override
-    public boolean sendContactRequest(String senderUserName, String receiverUserName) throws RemoteException, Exception {
-        User sender = new User(this.userRepository.getUser(senderUserName));
-        User receiver = new User(this.userRepository.getUser(receiverUserName));
+    public UserInterface sendContactRequest(ContactRequestInterface request) throws RemoteException, Exception {
+        UserInterface receiver = request.getReceiver();
+        
+        receiver.addContactRequest(request);
 
-        if (sender == null) {
-            throw new Exception("[USER SERVICE] " + senderUserName + " not found");
-        }
-
-        if (receiver == null) {
-            throw new Exception("[USER SERVICE] " + receiverUserName + " not found");
-        }
-
-        receiver.addContactRequest(new ContactRequest(sender, receiver, new Date()));
-
-        return true;
+        System.out.println("[USER SERVICE] User " + request.getSender().getUsername() + " has sent a contactRequest to " + request.getReceiver().getUsername());
+        
+        return receiver;
     }
 
     /**
      *
      * @param answer
      * @param request
+     * @return 
      * @throws RemoteException
      */
     @Override
@@ -112,4 +106,29 @@ public class UserService implements UserServiceInterface {
         
         return request.getReceiver();
     }
+
+    /**
+     * 
+     * @param username
+     * @param name
+     * @param firstName
+     * @param plainPassword
+     * @return
+     * @throws RemoteException 
+     */
+    @Override
+    public UserInterface createUser(String username, String name, String firstName, String plainPassword) throws RemoteException {
+        User user = new User(username, name, firstName, plainPassword);
+        
+        System.out.println("[USER SERVICE] User created : " + username);
+        
+        if (userRepository.getUser(username) == null) {
+            System.out.println("[USER SERVICE] User registered : " + username);
+            userRepository.getUsers().add(user);
+        }
+        
+        return user;
+    }
+    
+    
 }

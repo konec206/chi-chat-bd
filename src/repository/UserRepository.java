@@ -56,4 +56,22 @@ public class UserRepository {
         
         return userFound;
     }
+
+    /**
+     * 
+     * @return 
+     */
+    public ArrayList<UserInterface> getUsers() {
+        return users;
+    }
+
+    /**
+     * 
+     * @param users 
+     */
+    public void setUsers(ArrayList<UserInterface> users) {
+        this.users = users;
+    }
+    
+    
 }
