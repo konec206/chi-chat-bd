@@ -5,7 +5,6 @@
  */
 package chichatbd;
 
-import entity.User;
 import services.UserService;
 import interfaces.UserServiceInterface;
 import java.rmi.AccessException;
@@ -16,7 +15,6 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import repository.UserRepository;
 
 /**
  *

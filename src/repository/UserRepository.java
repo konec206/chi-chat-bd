@@ -5,7 +5,6 @@
  */
 package repository;
 
-import entity.User;
 import interfaces.UserInterface;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -29,14 +28,8 @@ public class UserRepository {
     
     private ArrayList<UserInterface> users;
     
-    public UserRepository() {
-        this.users = new ArrayList<>();
-        
-        this.users.add(new User("root1", "fake", "user1", "root"));
-        this.users.add(new User("root2", "fake", "user2", "root"));
-        this.users.add(new User("root3", "fake", "user3", "root"));
-        this.users.add(new User("root4", "fake", "user4", "root"));
-        this.users.add(new User("root5", "fake", "user5", "root"));
+    public UserRepository(ArrayList<UserInterface> users) {        
+        this.users = users;
     }
     
     /**

@@ -5,26 +5,32 @@
  */
 package services;
 
-import entity.User;
 import interfaces.ContactRequestInterface;
 import interfaces.UserInterface;
 import interfaces.UserServiceInterface;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import repository.UserRepository;
 
 /**
  *
  * @author thibault
  */
-public class UserService implements UserServiceInterface {
+public final class UserService implements UserServiceInterface {
 
     private UserRepository userRepository;
 
     /**
-     * Empty Constructor
+     * Constructor init Repository with an array of users from server side
      */
     public UserService() {
-        this.userRepository = new UserRepository();
+        this.userRepository = null;
+    }    
+    
+    @Override
+    public void initUserRepository(ArrayList<UserInterface> users) throws RemoteException {
+        System.out.println("[USER SERVICE] UserRepository initialized");
+        this.userRepository = new UserRepository(users);
     }
 
     /**
@@ -54,7 +60,7 @@ public class UserService implements UserServiceInterface {
     @Override
     public boolean authenticateUser(String username, String plainPassword) throws RemoteException {
         UserInterface user = this.userRepository.getUser(username);
-        
+                
         boolean authenticate = user != null && user.getPassword().equals(utils.Security.encodePassword(plainPassword));
         
         System.out.println("[USER SERVICE] User " + username + " has tried to authenticate : " + authenticate);
@@ -109,21 +115,16 @@ public class UserService implements UserServiceInterface {
 
     /**
      * 
-     * @param username
-     * @param name
-     * @param firstName
-     * @param plainPassword
      * @return
      * @throws RemoteException 
      */
     @Override
-    public UserInterface createUser(String username, String name, String firstName, String plainPassword) throws RemoteException {
-        User user = new User(username, name, firstName, plainPassword);
+    public UserInterface createUser(UserInterface user) throws RemoteException {
         
-        System.out.println("[USER SERVICE] User created : " + username);
+        System.out.println("[USER SERVICE] User created : " + user.getUsername());
         
-        if (userRepository.getUser(username) == null) {
-            System.out.println("[USER SERVICE] User registered : " + username);
+        if (userRepository.getUser(user.getUsername()) == null) {
+            System.out.println("[USER SERVICE] User registered : " + user.getUsername());
             userRepository.getUsers().add(user);
         }
         
