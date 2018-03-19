@@ -77,14 +77,10 @@ public final class UserService implements UserServiceInterface {
      * @throws Exception
      */
     @Override
-    public UserInterface sendContactRequest(ContactRequestInterface request) throws RemoteException, Exception {
-        UserInterface receiver = request.getReceiver();
-        
-        receiver.addContactRequest(request);
+    public void sendContactRequest(ContactRequestInterface request) throws RemoteException, Exception {        
+        request.getReceiver().addContactRequest(request);
 
         System.out.println("[USER SERVICE] User " + request.getSender().getUsername() + " has sent a contactRequest to " + request.getReceiver().getUsername());
-        
-        return receiver;
     }
 
     /**
@@ -115,18 +111,21 @@ public final class UserService implements UserServiceInterface {
 
     /**
      * 
+     * @param user
      * @return
      * @throws RemoteException 
      */
     @Override
-    public UserInterface createUser(UserInterface user) throws RemoteException {
+    public UserInterface createUser(UserInterface user) throws Exception, RemoteException {
         
         System.out.println("[USER SERVICE] User created : " + user.getUsername());
         
-        if (userRepository.getUser(user.getUsername()) == null) {
-            System.out.println("[USER SERVICE] User registered : " + user.getUsername());
-            userRepository.getUsers().add(user);
-        }
+        if (userRepository.getUser(user.getUsername()) != null)
+            throw new Exception("[REGISTER] This username is already taken");
+        
+        System.out.println("[USER SERVICE] User registered : " + user.getUsername());
+        userRepository.getUsers().add(user);
+        
         
         return user;
     }
