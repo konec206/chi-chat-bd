@@ -10,6 +10,8 @@ import interfaces.UserInterface;
 import interfaces.UserServiceInterface;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import repository.UserRepository;
 
 /**
@@ -78,7 +80,7 @@ public final class UserService implements UserServiceInterface {
      */
     @Override
     public void sendContactRequest(ContactRequestInterface request) throws RemoteException, Exception {        
-        request.getReceiver().addContactRequest(request);
+        this.getUser(request.getReceiver().getUsername()).addContactRequest(request);
 
         System.out.println("[USER SERVICE] User " + request.getSender().getUsername() + " has sent a contactRequest to " + request.getReceiver().getUsername());
     }
@@ -93,18 +95,27 @@ public final class UserService implements UserServiceInterface {
     @Override
     public UserInterface answerToContactRequest(boolean answer, ContactRequestInterface request) throws RemoteException {
         if (answer) {
-            System.out.println("[USER SERVICE] Accept contactRequest : " + request.getReceiver().getUsername());
-            request.setStatus(ContactRequestInterface.CONTACT_REQUEST_STATUS_ACCEPTED);
-
-            request.getSender().addContact(request.getReceiver());
-            request.getReceiver().addContact(request.getSender());
+            try {
+                System.out.println("[USER SERVICE] Accept contactRequest : " + request.getReceiver().getUsername());
+                request.setStatus(ContactRequestInterface.CONTACT_REQUEST_STATUS_ACCEPTED);
+                
+                this.getUser(request.getSender().getUsername()).addContact(request.getReceiver());
+                this.getUser(request.getReceiver().getUsername()).addContact(request.getSender());
+            } catch (Exception ex) {
+                Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             System.out.println("[USER SERVICE] Refuse contactRequest : " + request.getReceiver().getUsername());
 
             request.setStatus(ContactRequestInterface.CONTACT_REQUEST_STATUS_REFUSED);
         }
 
-        request.getReceiver().removeContactRequest(request);
+        try {
+            System.out.println("[USER SERVICE] Removing the request");
+            this.getUser(request.getReceiver().getUsername()).getContactRequest().remove(0);
+        } catch (Exception ex) {
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         return request.getReceiver();
     }
