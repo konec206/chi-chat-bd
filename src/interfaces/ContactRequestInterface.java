@@ -13,7 +13,7 @@ import java.util.Date;
  *
  * @author thibault
  */
-public interface ContactRequestInterface extends Remote{
+public interface ContactRequestInterface extends Remote {
     
     //Status
     public static int CONTACT_REQUEST_STATUS_SENT = 0;
